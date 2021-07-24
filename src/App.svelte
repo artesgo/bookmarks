@@ -26,14 +26,13 @@
   {/each}
 </main>
 
-<style>
+<style global>
   :root {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
   main {
-    text-align: center;
     padding: 1em;
     margin: 0 auto;
   }
@@ -46,5 +45,13 @@
 		position: absolute;
 		white-space: nowrap;
 		width: 1px;
+	}
+
+  ::-webkit-scrollbar {
+		width: 4px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: #2e86ab;
 	}
 </style>
