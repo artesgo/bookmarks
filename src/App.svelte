@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import Bookmark from "./lib/Bookmark.svelte";
   let bookmarks: any = [];
 
   onMount(() => {
@@ -19,7 +20,7 @@
   {#each bookmarks as bookmarkNode}
     <div>
       {#if bookmarkNode && bookmarkNode['title']}
-         {bookmarkNode['title']}
+        <Bookmark {bookmarkNode} />
       {/if}
     </div>
   {/each}
