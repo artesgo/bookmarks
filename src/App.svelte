@@ -1,14 +1,28 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  let bookmarks: any = [];
 
   onMount(() => {
-
+    chrome.bookmarks.getTree().then(bmTree => {
+      bmTree.forEach(subtree => {
+        // console.log(subtree.children);
+        let [bookmarkFolder, otherFolder, mobileFolder] = subtree.children;
+        bookmarks = bookmarkFolder.children;
+      })
+    })
   });
 </script>
 
 <main>
-  <h1>Artesgo Bookmarks</h1>
-
+  <h1 class="sr-only">Artesgo Bookmarks</h1>
+  <input type="text" placeholder='artesgo bookmarks' />
+  {#each bookmarks as bookmarkNode}
+    <div>
+      {#if bookmarkNode && bookmarkNode['title']}
+         {bookmarkNode['title']}
+      {/if}
+    </div>
+  {/each}
 </main>
 
 <style>
@@ -22,4 +36,14 @@
     padding: 1em;
     margin: 0 auto;
   }
+
+  .sr-only {
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+		height: 1px;
+		overflow: hidden;
+		position: absolute;
+		white-space: nowrap;
+		width: 1px;
+	}
 </style>
