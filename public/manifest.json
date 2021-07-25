@@ -3,8 +3,20 @@
 	"description": "My own bookmarks extension",
 	"version": "1.0",
 	"manifest_version": 3,
-	"permissions": ["bookmarks"],
+	"permissions": ["bookmarks", "tabs"],
 	"action": {
 		"default_popup": "index.html"
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"commands": {
+		"bookmark": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+E",
+				"mac": "Command+Shift+E"
+			},
+			"description": "Bookmark the current page."
+		}
 	}
 }
