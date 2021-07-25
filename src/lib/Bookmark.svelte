@@ -1,26 +1,32 @@
 <script lang="ts">
 	import { match } from './../bookmarks';
-	import { onMount } from 'svelte';
 	export let bookmarkNode;
+	export let parentTitle = '';
+	function isShown() {
+		return matchTitleOrUrl();
+	}
 
-	onMount(() => {});
+	function matchTitleOrUrl() {
+		let isMatchTitle = bookmarkNode.title?.toLowerCase().indexOf($match) > -1;
+		let isMatchUrl = bookmarkNode.url?.toLowerCase().indexOf($match) > -1;
+		let isMatchParent = parentTitle?.toLowerCase().indexOf($match) > -1;
+		return isMatchTitle || isMatchUrl || isMatchParent;
+	}
 </script>
 
 {#if bookmarkNode.children}
 	<h2>{bookmarkNode.title}</h2>
 	<hr />
 	{#each bookmarkNode.children as childNode (childNode['id'])}
-		<svelte:self bookmarkNode={childNode} />
+		<svelte:self bookmarkNode={childNode} parentTitle={bookmarkNode.title} />
 	{/each}
-{:else}
+{:else if $match === '' || isShown()}
 	<div>
-		{#if $match === '' || bookmarkNode.title.toLowerCase().indexOf($match) > -1}
-			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
-				<!-- not available from chrome.bookmarks -->
-				<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
-				{bookmarkNode.title}
-			</a>
-		{/if}
+		<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
+			<!-- not available from chrome.bookmarks -->
+			<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
+			{bookmarkNode.title}
+		</a>
 	</div>
 {/if}
 
