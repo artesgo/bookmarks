@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { match } from './bookmarks';
 	import { onMount } from 'svelte';
 	import Bookmark from './lib/Bookmark.svelte';
 	let bookmarks: any = [];
@@ -16,7 +17,7 @@
 
 <main>
 	<h1 class="sr-only">Artesgo Bookmarks</h1>
-	<input type="text" placeholder="artesgo bookmarks" />
+	<input type="text" placeholder="artesgo bookmarks" bind:value={$match} />
 	{#each bookmarks as bookmarkNode}
 		<div>
 			{#if bookmarkNode && bookmarkNode['title']}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { match } from './../bookmarks';
 	import { onMount } from 'svelte';
 	export let bookmarkNode;
 
@@ -13,11 +14,13 @@
 	{/each}
 {:else}
 	<div>
-		<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
-			<!-- not available from chrome.bookmarks -->
-			<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
-			{bookmarkNode.title}
-		</a>
+		{#if $match === '' || bookmarkNode.title.toLowerCase().indexOf($match) > -1}
+			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
+				<!-- not available from chrome.bookmarks -->
+				<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
+				{bookmarkNode.title}
+			</a>
+		{/if}
 	</div>
 {/if}
 
