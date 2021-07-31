@@ -1,43 +1,74 @@
 <script lang="ts">
+	import { onDestroy, onMount } from 'svelte';
 	import { match } from './../bookmarks';
 	export let bookmarkNode;
 	export let parentTitle = '';
-	function isShown() {
-		return matchTitleOrUrl();
-	}
+	let hasChildShown = true;
+	let unsub;
 
-	function matchTitleOrUrl() {
+	function isShown() {
 		let isMatchTitle = bookmarkNode.title?.toLowerCase().indexOf($match) > -1;
 		let isMatchUrl = bookmarkNode.url?.toLowerCase().indexOf($match) > -1;
 		let isMatchParent = parentTitle?.toLowerCase().indexOf($match) > -1;
+		bookmarkNode.isShown = isMatchTitle || isMatchUrl || isMatchParent;
 		return isMatchTitle || isMatchUrl || isMatchParent;
 	}
+
+	function isChildShown() {
+		if (bookmarkNode.children && $match !== '') {
+			return bookmarkNode.children.findIndex((node) => node.isShown) > -1;
+		}
+		return true;
+	}
+
+	onMount(() => {
+		unsub = match.subscribe(() => {
+			setTimeout(() => {
+				hasChildShown = isChildShown();
+			}, 0);
+		});
+	});
+
+	onDestroy(unsub);
 </script>
 
 {#if bookmarkNode.children}
-	<h2>{bookmarkNode.title}</h2>
-	<hr />
+	{#if hasChildShown}
+		<h2>{bookmarkNode.title}</h2>
+	{/if}
 	{#each bookmarkNode.children as childNode (childNode['id'])}
-		<svelte:self bookmarkNode={childNode} parentTitle={bookmarkNode.title} />
+		<div class="grid">
+			<div class="grid-spacer" />
+			<div class="grid-item">
+				<svelte:self bind:bookmarkNode={childNode} parentTitle={bookmarkNode.title} />
+			</div>
+		</div>
 	{/each}
 {:else if $match === '' || isShown()}
-	<div>
-		<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
-			<!-- not available from chrome.bookmarks -->
-			<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
-			{bookmarkNode.title}
-		</a>
-	</div>
+	<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
+		<!-- not available from chrome.bookmarks -->
+		<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
+		{bookmarkNode.title}
+	</a>
 {/if}
 
 <style>
+	.grid-item,
 	a {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 		display: block;
-		margin-bottom: 0.25rem;
 		text-decoration: none;
 		color: black;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: 1rem 1fr;
+	}
+
+	.grid-spacer {
+		border-left: 1px solid black;
 	}
 </style>

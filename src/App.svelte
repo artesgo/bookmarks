@@ -9,7 +9,6 @@
 			bmTree.forEach((subtree) => {
 				let [bookmarkFolder, otherFolder, mobileFolder] = subtree.children;
 				bookmarks = bookmarkFolder.children;
-				console.log(bookmarks);
 			});
 		});
 	});
@@ -19,24 +18,26 @@
 	<h1 class="sr-only">Artesgo Bookmarks</h1>
 	<input type="text" placeholder="artesgo bookmarks" bind:value={$match} />
 	{#each bookmarks as bookmarkNode}
-		<div>
-			{#if bookmarkNode && bookmarkNode['title']}
-				<Bookmark {bookmarkNode} />
-			{/if}
-		</div>
+		<Bookmark {bookmarkNode} />
 	{/each}
 </main>
 
 <style global>
-	:root {
-		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
-			'Open Sans', 'Helvetica Neue', sans-serif;
+	@font-face {
+		font-family: 'Quicksand';
+		src: local('Quicksand'), url('/font/static/Quicksand-Regular.ttf');
+	}
+	@font-face {
+		font-family: 'QuicksandBold';
+		src: local('QuicksandBold'), url('/font/static/Quicksand-Bold.ttf');
 	}
 
 	main {
+		font-family: 'Quicksand';
+		font-weight: 700;
 		padding: 1rem;
 		margin: 0 auto;
-		max-width: 450px;
+		width: 450px;
 	}
 
 	.sr-only {
