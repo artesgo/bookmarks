@@ -1,23 +1,37 @@
 <script lang="ts">
 	import { match } from './bookmarks';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Bookmark from './lib/Bookmark.svelte';
-	let bookmarks: any = [];
+	import { onRemove } from './onRemove';
+	let bookmarks = [];
 
 	onMount(() => {
+		updateNodes();
+		chrome.bookmarks.onRemoved.addListener((removed) => {
+			bookmarks = onRemove(removed, bookmarks);
+		});
+		// chrome.bookmarks.onChanged.addListener(() => updateNodes);
+		document.getElementById('search').focus();
+	});
+
+	function updateNodes() {
 		chrome.bookmarks.getTree().then((bmTree) => {
 			bmTree.forEach((subtree) => {
 				let [bookmarkFolder, otherFolder, mobileFolder] = subtree.children;
 				bookmarks = bookmarkFolder.children;
 			});
 		});
+	}
+
+	onDestroy(() => {
+		chrome.bookmarks.onRemoved.removeListener(onRemove);
 	});
 </script>
 
 <main>
 	<h1 class="sr-only">Artesgo Bookmarks</h1>
-	<input type="text" placeholder="artesgo bookmarks" bind:value={$match} />
-	{#each bookmarks as bookmarkNode}
+	<input id="search" type="text" placeholder="artesgo bookmarks" bind:value={$match} />
+	{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
 		<Bookmark {bookmarkNode} />
 	{/each}
 </main>

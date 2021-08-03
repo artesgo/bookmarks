@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { onRemove } from '../onRemove';
+
 	import { onDestroy, onMount } from 'svelte';
-	import { match } from './../bookmarks';
+	import { match } from '../bookmarks';
 	export let bookmarkNode;
 	export let parentTitle = '';
 	let hasChildShown = true;
 	let unsub;
+	let edit = false;
 
 	function isShown() {
 		let isMatchTitle = bookmarkNode.title?.toLowerCase().indexOf($match) > -1;
@@ -21,15 +24,40 @@
 		return true;
 	}
 
+	function deleteNode() {
+		chrome.bookmarks.remove(bookmarkNode.id);
+	}
+
+	function editNode() {
+		edit = !edit;
+	}
+
+	function saveNode() {
+		chrome.bookmarks
+			.update(bookmarkNode.id, {
+				title: bookmarkNode.title,
+			})
+			.then();
+		editNode();
+	}
+
 	onMount(() => {
 		unsub = match.subscribe(() => {
 			setTimeout(() => {
 				hasChildShown = isChildShown();
 			}, 0);
 		});
+		if (bookmarkNode.children) {
+			chrome.bookmarks.onRemoved.addListener((removed) => {
+				bookmarkNode.children = onRemove(removed, bookmarkNode.children);
+			});
+		}
 	});
 
-	onDestroy(unsub);
+	onDestroy(() => {
+		unsub();
+		chrome.bookmarks.onRemoved.removeListener(onRemove);
+	});
 </script>
 
 {#if bookmarkNode.children}
@@ -45,11 +73,21 @@
 		</div>
 	{/each}
 {:else if $match === '' || isShown()}
-	<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
-		<!-- not available from chrome.bookmarks -->
-		<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
-		{bookmarkNode.title}
-	</a>
+	<div class="flex">
+		{#if edit}
+			<!-- content here -->
+			<input type="text" bind:value={bookmarkNode.title} />
+			<button on:click={saveNode}>Save</button>
+			<button on:click={deleteNode}>Delete</button>
+		{:else}
+			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
+				<!-- not available from chrome.bookmarks -->
+				<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
+				{bookmarkNode.title}
+			</a>
+			<button on:click={editNode}>Edit</button>
+		{/if}
+	</div>
 {/if}
 
 <style>
@@ -63,6 +101,11 @@
 		color: black;
 	}
 
+	a:focus,
+	a:hover {
+		color: #ff3e00;
+	}
+
 	.grid {
 		display: grid;
 		grid-template-columns: 1rem 1fr;
@@ -70,5 +113,10 @@
 
 	.grid-spacer {
 		border-left: 1px solid black;
+	}
+
+	.flex {
+		display: flex;
+		justify-content: space-between;
 	}
 </style>
