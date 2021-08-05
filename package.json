@@ -4,8 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "npm run format && vite build && npm run build:bg",
-		"build:bg": "esbuild src/background.ts --bundle --outfile=dist/background.js",
+		"build": "npm run format && vite build",
 		"serve": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"format": "prettier --write --plugin-search-dir=. ."

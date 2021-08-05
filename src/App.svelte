@@ -4,6 +4,7 @@
 	import Bookmark from './lib/Bookmark.svelte';
 	import { onRemove } from './onRemove';
 	let bookmarks = [];
+	let isPopup = false;
 
 	onMount(() => {
 		updateNodes();
@@ -12,6 +13,7 @@
 		});
 		// chrome.bookmarks.onChanged.addListener(() => updateNodes);
 		document.getElementById('search').focus();
+		isPopup = location.hash === '#popup';
 	});
 
 	function updateNodes() {
@@ -28,7 +30,7 @@
 	});
 </script>
 
-<main>
+<main class:popup={isPopup}>
 	<h1 class="sr-only">Artesgo Bookmarks</h1>
 	<input id="search" type="text" placeholder="artesgo bookmarks" bind:value={$match} />
 	{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
@@ -51,6 +53,10 @@
 		font-weight: 700;
 		padding: 1rem;
 		margin: 0 auto;
+		width: 750px;
+	}
+
+	main.popup {
 		width: 450px;
 	}
 

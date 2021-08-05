@@ -3,20 +3,18 @@
 	"description": "My own bookmarks extension",
 	"version": "1.0",
 	"manifest_version": 3,
-	"permissions": ["bookmarks", "tabs"],
+	"permissions": ["bookmarks"],
 	"action": {
-		"default_popup": "index.html"
+		"default_popup": "index.html#popup"
 	},
-	"background": {
-		"service_worker": "background.js"
+	"chrome_url_overrides": {
+		"newtab": "index.html"
 	},
-	"commands": {
-		"bookmark": {
-			"suggested_key": {
-				"default": "Ctrl+Shift+E",
-				"mac": "Command+Shift+E"
-			},
-			"description": "Bookmark the current page."
-		}
+	"icons": {
+		"16": "images/bookmark--16.png",
+		"32": "images/bookmark--32.png",
+		"48": "images/bookmark--48.png",
+		"64": "images/bookmark--64.png",
+		"128": "images/bookmark--128.png"
 	}
 }

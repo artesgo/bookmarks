@@ -62,7 +62,7 @@
 
 {#if bookmarkNode.children}
 	{#if hasChildShown}
-		<h2>{bookmarkNode.title}</h2>
+		<h2><img src="./icons/bookmark.svg" role="presentation" alt="" /> {bookmarkNode.title}</h2>
 	{/if}
 	{#each bookmarkNode.children as childNode (childNode['id'])}
 		<div class="grid">
@@ -77,15 +77,24 @@
 		{#if edit}
 			<!-- content here -->
 			<input type="text" bind:value={bookmarkNode.title} />
-			<button on:click={saveNode}>Save</button>
-			<button on:click={deleteNode}>Delete</button>
+			<button on:click={saveNode}>
+				<div class="sr-only">Save</div>
+				<img src="./icons/check.svg" alt="save icon" />
+			</button>
+			<button on:click={deleteNode}>
+				<div class="sr-only">Delete</div>
+				<img src="./icons/delete.svg" alt="delete icon" />
+			</button>
 		{:else}
 			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
 				<!-- not available from chrome.bookmarks -->
 				<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
 				{bookmarkNode.title}
 			</a>
-			<button on:click={editNode}>Edit</button>
+			<button on:click={editNode}>
+				<div class="sr-only">Edit</div>
+				<img src="./icons/edit-alt.svg" alt="edit icon" />
+			</button>
 		{/if}
 	</div>
 {/if}
@@ -117,6 +126,22 @@
 
 	.flex {
 		display: flex;
-		justify-content: space-between;
+	}
+
+	.flex input,
+	.flex a {
+		flex-grow: 1;
+	}
+
+	.flex button {
+		flex-grow: 0;
+		background: none;
+		border: none;
+	}
+
+	h2 img,
+	.flex button img {
+		width: 16px;
+		height: 16px;
 	}
 </style>
