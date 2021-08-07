@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { onRemove } from '../onRemove';
+	import BookmarkSvg from '../assets/bookmark.svelte';
+	import EditSvg from '../assets/edit-alt.svelte';
+	import DeleteSvg from '../assets/delete.svelte';
+	import CheckSvg from '../assets/check.svelte';
 
+	import { onRemove } from '../onRemove';
 	import { onDestroy, onMount } from 'svelte';
 	import { match } from '../bookmarks';
 	export let bookmarkNode;
@@ -62,7 +66,7 @@
 
 {#if bookmarkNode.children}
 	{#if hasChildShown}
-		<h2><img src="./icons/bookmark.svg" role="presentation" alt="" /> {bookmarkNode.title}</h2>
+		<h2><BookmarkSvg /><span>{bookmarkNode.title}</span></h2>
 	{/if}
 	{#each bookmarkNode.children as childNode (childNode['id'])}
 		<div class="grid">
@@ -79,11 +83,11 @@
 			<input type="text" bind:value={bookmarkNode.title} />
 			<button on:click={saveNode}>
 				<div class="sr-only">Save</div>
-				<img src="./icons/check.svg" alt="save icon" />
+				<CheckSvg />
 			</button>
 			<button on:click={deleteNode}>
 				<div class="sr-only">Delete</div>
-				<img src="./icons/delete.svg" alt="delete icon" />
+				<DeleteSvg />
 			</button>
 		{:else}
 			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
@@ -93,13 +97,17 @@
 			</a>
 			<button on:click={editNode}>
 				<div class="sr-only">Edit</div>
-				<img src="./icons/edit-alt.svg" alt="edit icon" />
+				<EditSvg />
 			</button>
 		{/if}
 	</div>
 {/if}
 
 <style>
+	h2 span {
+		margin-left: 0.5rem;
+	}
+
 	.grid-item,
 	a {
 		overflow: hidden;
@@ -107,7 +115,7 @@
 		white-space: nowrap;
 		display: block;
 		text-decoration: none;
-		color: black;
+		color: inherit;
 	}
 
 	a:focus,
@@ -121,7 +129,7 @@
 	}
 
 	.grid-spacer {
-		border-left: 1px solid black;
+		border-left: 1px solid #8f8c8d;
 	}
 
 	.flex {
@@ -137,11 +145,6 @@
 		flex-grow: 0;
 		background: none;
 		border: none;
-	}
-
-	h2 img,
-	.flex button img {
-		width: 16px;
-		height: 16px;
+		color: inherit;
 	}
 </style>

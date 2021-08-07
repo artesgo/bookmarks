@@ -1,0 +1,55 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="moon">
+<g id="Frame 4">
+<g clip-path="url(#clip0)">
+<circle id="Ellipse 14" cx="32" cy="32" r="17" fill="#C4C4C4"/>
+</g>
+</g>
+<g id="Frame 2" style="mix-blend-mode:multiply">
+<g clip-path="url(#clip1)">
+<rect x="15" y="15" width="34" height="34" rx="17" fill="#E7E7E7"/>
+<circle id="Ellipse 7" cx="32" cy="32" r="16.5" fill="#C4C4C4" stroke="black"/>
+<g id="Ellipse 8" style="mix-blend-mode:multiply">
+<circle cx="39" cy="18" r="3.5" fill="#C4C4C4"/>
+<circle cx="39" cy="18" r="3.5" stroke="black"/>
+</g>
+<g id="Ellipse 14_2" style="mix-blend-mode:multiply">
+<circle cx="22" cy="33" r="3.5" fill="#C4C4C4"/>
+<circle cx="22" cy="33" r="3.5" stroke="black"/>
+</g>
+<g id="Ellipse 10" style="mix-blend-mode:multiply">
+<circle cx="27" cy="47" r="1.5" fill="#C4C4C4"/>
+<circle cx="27" cy="47" r="1.5" stroke="black"/>
+</g>
+<g id="Ellipse 12" style="mix-blend-mode:multiply">
+<circle cx="39" cy="42" r="1.5" fill="#C4C4C4"/>
+<circle cx="39" cy="42" r="1.5" stroke="black"/>
+</g>
+<g id="Ellipse 13" style="mix-blend-mode:multiply">
+<circle cx="45" cy="26" r="1.5" fill="#C4C4C4"/>
+<circle cx="45" cy="26" r="1.5" stroke="black"/>
+</g>
+<g id="Ellipse 9" style="mix-blend-mode:multiply">
+<circle cx="42" cy="33" r="3.5" fill="#C4C4C4"/>
+<circle cx="42" cy="33" r="3.5" stroke="black"/>
+</g>
+<g id="Ellipse 11" style="mix-blend-mode:multiply">
+<circle cx="35" cy="25" r="2.5" fill="#C4C4C4"/>
+<circle cx="35" cy="25" r="2.5" stroke="black"/>
+</g>
+<g id="Ellipse 16" style="mix-blend-mode:multiply">
+<circle cx="23" cy="19" r="2.5" fill="#C4C4C4"/>
+<circle cx="23" cy="19" r="2.5" stroke="black"/>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect x="26" y="15" width="34" height="34" rx="17" fill="white"/>
+</clipPath>
+<clipPath id="clip1">
+<rect x="15" y="15" width="34" height="34" rx="17" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -3,7 +3,7 @@
 	"description": "My own bookmarks extension",
 	"version": "1.0",
 	"manifest_version": 3,
-	"permissions": ["bookmarks"],
+	"permissions": ["bookmarks", "storage"],
 	"action": {
 		"default_popup": "index.html#popup"
 	},

@@ -13,6 +13,15 @@
 		});
 		// chrome.bookmarks.onChanged.addListener(() => updateNodes);
 		document.getElementById('search').focus();
+		chrome.storage.sync.get('darkMode', (mode) => {
+			darkMode = mode.darkMode;
+		});
+		chrome.storage.sync.get('search', (search) => {
+			console.log(search);
+			if (search.search) {
+				$match = search.search;
+			}
+		});
 		isPopup = location.hash === '#popup';
 	});
 
@@ -28,14 +37,41 @@
 	onDestroy(() => {
 		chrome.bookmarks.onRemoved.removeListener(onRemove);
 	});
+
+	let darkMode = false;
+
+	function toggleDarkMode() {
+		darkMode = !darkMode;
+		chrome.storage.sync.set({ darkMode: darkMode });
+	}
+
+	function saveSearch() {
+		chrome.storage.sync.set({ search: $match });
+	}
 </script>
 
-<main class:popup={isPopup}>
-	<h1 class="sr-only">Artesgo Bookmarks</h1>
-	<input id="search" type="text" placeholder="artesgo bookmarks" bind:value={$match} />
-	{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
-		<Bookmark {bookmarkNode} />
-	{/each}
+<main class:popup={isPopup} class:dark={darkMode} class:light={!darkMode}>
+	<div class="container">
+		<h1 class="sr-only">Artesgo Bookmarks</h1>
+		<button on:click={toggleDarkMode}>
+			{#if darkMode}
+				Show Light Mode
+			{:else}
+				Show Dark Mode
+			{/if}
+		</button>
+		<input
+			id="search"
+			type="text"
+			autocomplete="off"
+			placeholder="artesgo bookmarks"
+			bind:value={$match}
+			on:change={saveSearch}
+		/>
+		{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
+			<Bookmark {bookmarkNode} />
+		{/each}
+	</div>
 </main>
 
 <style global>
@@ -48,16 +84,35 @@
 		src: local('QuicksandBold'), url('/font/static/Quicksand-Bold.ttf');
 	}
 
+	body {
+		padding: 0;
+		margin: 0;
+	}
+
 	main {
 		font-family: 'Quicksand';
 		font-weight: 700;
-		padding: 1rem;
+		min-height: 100vh;
+	}
+
+	.container {
+		max-width: 750px;
 		margin: 0 auto;
-		width: 750px;
+		padding: 1rem;
+	}
+
+	main.light {
+		color: #1e1e24;
+		background: #fcfcfc;
+	}
+
+	main.dark {
+		color: #fcfcfc;
+		background: #1e1e24;
 	}
 
 	main.popup {
-		width: 450px;
+		width: 420px;
 	}
 
 	.sr-only {
