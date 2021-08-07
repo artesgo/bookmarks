@@ -53,25 +53,40 @@
 <main class:popup={isPopup} class:dark={darkMode} class:light={!darkMode}>
 	<div class="container">
 		<h1 class="sr-only">Artesgo Bookmarks</h1>
-		<button on:click={toggleDarkMode}>
-			{#if darkMode}
-				Show Light Mode
-			{:else}
-				Show Dark Mode
-			{/if}
-		</button>
-		<input
-			id="search"
-			type="text"
-			autocomplete="off"
-			placeholder="artesgo bookmarks"
-			bind:value={$match}
-			on:change={saveSearch}
-		/>
+		<div class="controls">
+			<button on:click={toggleDarkMode}>
+				{#if darkMode}
+					<div class="sr-only">Show Light Mode</div>
+					<img src="./icons/sun.svg" role="presentation" alt="" />
+				{:else}
+					<div class="sr-only">Show Dark Mode</div>
+					<img src="./icons/moon.svg" role="presentation" alt="" />
+				{/if}
+			</button>
+			<input
+				id="search"
+				type="text"
+				autocomplete="off"
+				placeholder="artesgo bookmarks"
+				bind:value={$match}
+				on:change={saveSearch}
+			/>
+		</div>
 		{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
 			<Bookmark {bookmarkNode} />
 		{/each}
 	</div>
+	<style>
+		button img {
+			width: 32px;
+			height: 32px;
+		}
+
+		.controls {
+			display: flex;
+			align-items: center;
+		}
+	</style>
 </main>
 
 <style global>
@@ -104,11 +119,13 @@
 	main.light {
 		color: #1e1e24;
 		background: #fcfcfc;
+		transition: 300ms;
 	}
 
 	main.dark {
 		color: #fcfcfc;
 		background: #1e1e24;
+		transition: 300ms;
 	}
 
 	main.popup {
@@ -131,5 +148,12 @@
 
 	::-webkit-scrollbar-thumb {
 		background: #2e86ab;
+	}
+
+	button {
+		flex-grow: 0;
+		background: none;
+		border: none;
+		color: inherit;
 	}
 </style>

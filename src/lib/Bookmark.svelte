@@ -140,11 +140,4 @@
 	.flex a {
 		flex-grow: 1;
 	}
-
-	.flex button {
-		flex-grow: 0;
-		background: none;
-		border: none;
-		color: inherit;
-	}
 </style>
