@@ -23,11 +23,6 @@
 				$match = search.search;
 			}
 		});
-		chrome.storage.sync.get('saveSearches', (save) => {
-			if (save.save) {
-				saveSearches = save.save;
-			}
-		});
 		isPopup = location.hash === '#popup';
 	});
 
@@ -51,6 +46,10 @@
 
 	function saveSearch() {
 		chrome.storage.sync.set({ search: $match });
+	}
+
+	function clearSearch() {
+		$match = '';
 	}
 </script>
 
@@ -76,6 +75,7 @@
 				bind:value={$match}
 				on:change={saveSearch}
 			/>
+			<button on:click={clearSearch}>Clear Search</button>
 		</div>
 		{#each bookmarks as bookmarkNode (bookmarkNode['id'])}
 			<Bookmark {bookmarkNode} />
