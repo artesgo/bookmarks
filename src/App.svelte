@@ -5,6 +5,8 @@
 	import { onRemove } from './onRemove';
 	let bookmarks = [];
 	let isPopup = false;
+	let darkMode = false;
+	let saveSearches = false;
 
 	onMount(() => {
 		updateNodes();
@@ -17,9 +19,13 @@
 			darkMode = mode.darkMode;
 		});
 		chrome.storage.sync.get('search', (search) => {
-			console.log(search);
 			if (search.search) {
 				$match = search.search;
+			}
+		});
+		chrome.storage.sync.get('saveSearches', (save) => {
+			if (save.save) {
+				saveSearches = save.save;
 			}
 		});
 		isPopup = location.hash === '#popup';
@@ -37,8 +43,6 @@
 	onDestroy(() => {
 		chrome.bookmarks.onRemoved.removeListener(onRemove);
 	});
-
-	let darkMode = false;
 
 	function toggleDarkMode() {
 		darkMode = !darkMode;
@@ -63,6 +67,7 @@
 					<img src="./icons/moon.svg" role="presentation" alt="" />
 				{/if}
 			</button>
+			<label for="search" class="sr-only">Search</label>
 			<input
 				id="search"
 				type="text"
@@ -153,7 +158,27 @@
 	button {
 		flex-grow: 0;
 		background: none;
-		border: none;
+		border: 1px solid transparent;
 		color: inherit;
+		border-radius: 50%;
+	}
+
+	button,
+	a,
+	input {
+		outline: none;
+	}
+
+	input:focus,
+	input:hover,
+	button.icon:focus,
+	button.icon:hover {
+		border: 2px solid #ff3e00;
+		transition: 300ms;
+	}
+
+	button.icon:focus,
+	button.icon:hover {
+		border-radius: 50%;
 	}
 </style>

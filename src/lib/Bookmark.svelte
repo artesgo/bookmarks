@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { onDestroy, onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
+
 	import BookmarkSvg from '../assets/bookmark.svelte';
 	import EditSvg from '../assets/edit-alt.svelte';
 	import DeleteSvg from '../assets/delete.svelte';
 	import CheckSvg from '../assets/check.svelte';
 
 	import { onRemove } from '../onRemove';
-	import { onDestroy, onMount } from 'svelte';
 	import { match } from '../bookmarks';
 	export let bookmarkNode;
 	export let parentTitle = '';
@@ -34,6 +36,13 @@
 
 	function editNode() {
 		edit = !edit;
+		setTimeout(() => {
+			if (edit) {
+				document.getElementById(bookmarkNode.id).focus();
+			} else {
+				document.getElementById(bookmarkNode.id + '-edit').focus();
+			}
+		}, 0);
 	}
 
 	function saveNode() {
@@ -62,6 +71,11 @@
 		unsub();
 		chrome.bookmarks.onRemoved.removeListener(onRemove);
 	});
+
+	function closeTab() {
+		// close tab on open link
+		window.close();
+	}
 </script>
 
 {#if bookmarkNode.children}
@@ -77,25 +91,26 @@
 		</div>
 	{/each}
 {:else if $match === '' || isShown()}
-	<div class="flex">
+	<div class="flex" transition:slide>
 		{#if edit}
 			<!-- content here -->
-			<input type="text" bind:value={bookmarkNode.title} />
-			<button on:click={saveNode}>
+			<label for={bookmarkNode.id} />
+			<input id={bookmarkNode.id} type="text" bind:value={bookmarkNode.title} />
+			<button class="icon" on:click={saveNode}>
 				<div class="sr-only">Save</div>
 				<CheckSvg />
 			</button>
-			<button on:click={deleteNode}>
+			<button class="icon" on:click={deleteNode}>
 				<div class="sr-only">Delete</div>
 				<DeleteSvg />
 			</button>
 		{:else}
-			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url}>
+			<a href={bookmarkNode.url} target="_blank" title={bookmarkNode.url} on:click={closeTab}>
 				<!-- not available from chrome.bookmarks -->
 				<!-- <img src={bookmarkNode.favIconUrl} alt="" role="presentation" /> -->
 				{bookmarkNode.title}
 			</a>
-			<button on:click={editNode}>
+			<button id={`${bookmarkNode.id}-edit`} class="icon" on:click={editNode}>
 				<div class="sr-only">Edit</div>
 				<EditSvg />
 			</button>
@@ -139,5 +154,13 @@
 	.flex input,
 	.flex a {
 		flex-grow: 1;
+	}
+
+	button.icon {
+		width: 28px;
+		height: 28px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
