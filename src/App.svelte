@@ -50,6 +50,7 @@
 
 	function clearSearch() {
 		$match = '';
+		chrome.storage.sync.set({ search: '' });
 	}
 </script>
 
